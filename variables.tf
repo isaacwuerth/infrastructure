@@ -9,6 +9,11 @@ variable "sshkey_private" {
   sensitive = true
 }
 
+variable "proxmox_server" {
+  type        = string
+  description = "The IP of the Proxmox server"  
+}
+
 variable "proxmox_token_id" {
   type        = string
   description = "The token ID of the Proxmox server"  
