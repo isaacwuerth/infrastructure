@@ -54,6 +54,7 @@ resource "proxmox_lxc" "multiple_mountpoints" {
     name   = "eth0"
     bridge = "vmbr0"
     ip     = "10.0.10.100/24"
+    gw     = "10.0.10.1"
     ip6    = "dhcp"
   }
 }
