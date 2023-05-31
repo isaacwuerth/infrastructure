@@ -69,8 +69,7 @@ resource "proxmox_lxc" "multiple_mountpoints" {
       private_key = var.ssh_key_private_mgmt
     }
   }
-
   provisioner "local-exec" {
-    command = "echo ${var.ssh_key_private_mgmt} > /tmp/id_rsa && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '10.0.10.100,' --private-key '/tmp/id_rsa' -e 'pub_key='${var.ssh_key_public_mgmt}' apache-install.yml"
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '10.0.10.100,' --private-key '/id_rsa' -e 'pub_key='${var.ssh_key_public_mgmt}' apache-install.yml"
   }
 }
