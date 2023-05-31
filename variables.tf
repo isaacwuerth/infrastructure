@@ -1,11 +1,16 @@
-variable "sshkey_public" {
+variable "ssh_key_public_admin" {
   type        = string
-  description = "The public SSH key to assign to the VM"
+  description = "The admin public SSH key to assign to the VM"
 }
 
-variable "sshkey_private" {
+variable "ssh_key_public_mgmt" {
   type        = string
-  description = "The private SSH key to assign to the VM"
+  description = "The management public SSH key to assign to the VM"
+}
+
+variable "ssh_key_private_mgmt" {
+  type        = string
+  description = "The management private SSH key to assign to the VM"
   sensitive = true
 }
 

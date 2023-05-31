@@ -41,7 +41,8 @@ resource "proxmox_lxc" "multiple_mountpoints" {
   start        = true
 
   ssh_public_keys = <<-EOT
-    ${var.sshkey_public}
+    ${var.ssh_key_public_mgmt}
+    ${var.ssh_key_public_admin}
   EOT
 
   // Terraform will crash without rootfs defined
@@ -56,5 +57,20 @@ resource "proxmox_lxc" "multiple_mountpoints" {
     ip     = "10.0.10.100/24"
     gw     = "10.0.10.1"
     ip6    = "dhcp"
+  }
+
+  provisioner "remote-exec" {
+    inline = ["sudo apt update", "sudo apt install python3 -y", "echo Done!"]
+
+    connection {
+      host        = "10.0.10.100"
+      type        = "ssh"
+      user        = "root"
+      private_key = var.ssh_key_private_mgmt
+    }
+  }
+
+  provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '10.0.10.100,' --private-key ${var.ssh_key_private_mgmt} -e 'pub_key=${var.ssh_key_public_mgmt}' apache-install.yml"
   }
 }
