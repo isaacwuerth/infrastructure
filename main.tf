@@ -41,7 +41,7 @@ resource "proxmox_lxc" "multiple_mountpoints" {
   start        = true
 
   ssh_public_keys = <<-EOT
-    ${var.ssh_public_key}
+    ${var.sshkey_public}
   EOT
 
   // Terraform will crash without rootfs defined
