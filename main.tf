@@ -32,3 +32,28 @@ provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
 
+resource "proxmox_lxc" "multiple_mountpoints" {
+  target_node  = "vh01"
+  hostname     = "test"
+  ostemplate   = "pool01:cache/debian-11-standard_11.6-1_amd64.tar.zst"
+  unprivileged = true
+  onboot       = true
+  start        = true
+
+  ssh_public_keys = <<-EOT
+    ${var.ssh_public_key}
+  EOT
+
+  // Terraform will crash without rootfs defined
+  rootfs {
+    storage = "pool01"
+    size    = "2G"
+  }
+
+  network {
+    name   = "eth0"
+    bridge = "vmbr0"
+    ip     = "10.0.10.100/24"
+    ip6    = "dhcp"
+  }
+}
