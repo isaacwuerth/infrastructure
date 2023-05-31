@@ -35,7 +35,7 @@ provider "cloudflare" {
 resource "proxmox_lxc" "multiple_mountpoints" {
   target_node  = "vh01"
   hostname     = "test"
-  ostemplate   = "pool01:cache/debian-11-standard_11.6-1_amd64.tar.zst"
+  ostemplate   = "pool01:vztmpl/debian-11-standard_11.6-1_amd64.tar.zst"
   unprivileged = true
   onboot       = true
   start        = true
