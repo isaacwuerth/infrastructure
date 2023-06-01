@@ -32,6 +32,7 @@ resource "proxmox_vm_qemu" "vm" {
   clone = var.template
   onboot = true
   oncreate = true
+  boot = "order=scsi0;net0"
 
   agent = 1
   os_type = "cloud-init"
@@ -46,7 +47,7 @@ resource "proxmox_vm_qemu" "vm" {
     size = var.disk_size
     type = "scsi"
     storage = "pool01"
-    iothread = 1
+    iothread = 0
   }
   
   network {
