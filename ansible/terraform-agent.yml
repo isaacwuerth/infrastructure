@@ -1,0 +1,10 @@
+---
+- name: Configure Terraform Agent
+  hosts: all
+  remote_user: root
+
+  tasks:
+    - name: Disable Host Key Checking 
+      community.general.ssh_config:
+        host: "*"
+        strict_host_key_checking: "no"
