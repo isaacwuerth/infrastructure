@@ -34,9 +34,9 @@ provider "cloudflare" {
 
 
 resource "ssh_resource" "cloud_init_vendor" {
-  host = var.proxmox_server
+  host = "10.0.10.10"
   user = "root"
-  private_key = "${var.sshkey_private}"
+  private_key = "${var.ssh_key_private_mgmt}"
   file {
     content     = file("cloudinit/cloudinit-vendor-ubuntu.yml")
     destination = "/mnt/pve/pool01/snippets/vendor-ci.yml"
