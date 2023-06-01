@@ -26,7 +26,7 @@ resource "random_password" "password" {
   min_special = 8
 }
 
-resource "proxmox_vm_qemu" "itsvc_default" {
+resource "proxmox_vm_qemu" "vm" {
   name = var.name
   target_node = var.target_node
   clone = var.template
@@ -89,6 +89,6 @@ resource "cloudflare_record" "server_record" {
   ttl     = 3600
   proxied = false
   depends_on = [
-    proxmox_vm_qemu.itsvc_default
+    proxmox_vm_qemu.vm
   ]
 }

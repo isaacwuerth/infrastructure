@@ -44,7 +44,7 @@ resource "ssh_resource" "cloud_init_vendor" {
   }
 }
 
-module "operational_github_runner_itsvc_infra" {
+module "siem" {
   source = "./modules/vm"
   cloudflare_zone_id = var.cloudflare_zone_id
   name = "siem.itsvc.ch"
