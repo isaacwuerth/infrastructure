@@ -32,13 +32,20 @@ provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
 
-resource "proxmox_lxc" "multiple_mountpoints" {
+
+resource "proxmox_lxc" "siem_docker_host" {
   target_node  = "vh01"
-  hostname     = "test"
+  pool         = "Production"
+  hostname     = "siem.itsvc.ch"
   ostemplate   = "pool01:vztmpl/debian-11-standard_11.6-1_amd64.tar.zst"
   unprivileged = true
   onboot       = true
   start        = true
+  cores        = 4
+  memory       = 8192
+  tags         = "itsvc"
+
+
 
   ssh_public_keys = <<-EOT
     ${var.ssh_key_public_mgmt}
@@ -48,13 +55,13 @@ resource "proxmox_lxc" "multiple_mountpoints" {
   // Terraform will crash without rootfs defined
   rootfs {
     storage = "pool01"
-    size    = "2G"
+    size    = "128G"
   }
 
   network {
     name   = "eth0"
     bridge = "vmbr0"
-    ip     = "10.0.10.100/24"
+    ip     = "10.0.10.110/24"
     gw     = "10.0.10.1"
     ip6    = "dhcp"
   }
@@ -63,13 +70,13 @@ resource "proxmox_lxc" "multiple_mountpoints" {
     inline = ["sudo apt update", "sudo apt install python3 -y", "echo Done!"]
 
     connection {
-      host        = "10.0.10.100"
+      host        = "10.0.10.110"
       type        = "ssh"
       user        = "root"
       private_key = var.ssh_key_private_mgmt
-    }
+    } 
   }
   provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '10.0.10.100,' --private-key /id_rsa -e 'pub_key=${var.ssh_key_public_mgmt}' apache-install.yml"
-  }
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '10.0.10.110,' --private-key /id_rsa -e 'pub_key=${var.ssh_key_public_mgmt}' ./ansible/docker.yml"
+  }  
 }
