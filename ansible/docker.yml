@@ -4,11 +4,14 @@
   remote_user: root
 
   tasks:
-    - local_action: command ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" root@{{ ansible_inventory_hostname }} exit
-      register: log_output
-      until: log_output.stdout.find("Last login") > -1
-      retries: 10
-      delay: 30
+  - name: Wait 300 seconds for port 22 to become open and contain "Last Login"
+    wait_for:
+      port: 22
+      host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
+      search_regex: Last Login
+      delay: 10
+    vars:
+      ansible_connection: local
 
     - name: Install aptitude
       apt:

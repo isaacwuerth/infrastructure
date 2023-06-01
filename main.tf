@@ -44,7 +44,7 @@ resource "proxmox_lxc" "siem_docker_host" {
   cores        = 4
   memory       = 8192
   swap         = 8192
-  tags         = "itsvc"
+  tags         = "itsvc,siem,security"
 
   ssh_public_keys = <<-EOT
     ${var.ssh_key_public_mgmt}
