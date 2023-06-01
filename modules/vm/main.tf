@@ -29,7 +29,7 @@ resource "random_password" "password" {
 resource "proxmox_vm_qemu" "itsvc_default" {
   name = var.name
   target_node = var.target_node
-  clone = var.clone
+  clone = var.template
   onboot = true
   oncreate = true
 

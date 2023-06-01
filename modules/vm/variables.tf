@@ -95,11 +95,11 @@ variable "network_bridge" {
   default = "vmbr0"
 }
 
-variable "clone" {
+variable "template" {
   type        = string
   description = "The name of the template to clone"
   validation {
-    condition     = can(regex("^[a-zA-Z0-9-]+$", var.clone))
+    condition     = can(regex("^[a-zA-Z0-9-.]+$", var.clone))
     error_message = "The name of the template can only contain alphanumeric characters."
   }
   default = "template-ubuntu-22.04"
