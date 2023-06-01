@@ -109,3 +109,19 @@ variable "cloudflare_zone_id" {
   type        = string
   description = "The zone ID of the Cloudflare zone"
 }
+
+variable "ansible_file" {
+  type        = string
+  description = "The ansible file to run"
+  default = ""
+}
+
+variable "ssh_key_public_mgmt" {
+  type = string
+  description = "The public key to use"
+}
+
+variable "ssh_key_private_mgmt" {
+  type = string
+  description = "The private key for connections"
+}

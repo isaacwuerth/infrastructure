@@ -33,6 +33,17 @@ provider "cloudflare" {
 }
 
 
+resource "ssh_resource" "cloud_init_vendor" {
+  host = var.proxmox_server
+  user = "root"
+  private_key = "${var.sshkey_private}"
+  file {
+    content     = file("cloudinit/cloudinit-vendor-ubuntu.yml")
+    destination = "/mnt/pve/pool01/snippets/vendor-ci.yml"
+    permissions = "0644"
+  }
+}
+
 module "operational_github_runner_itsvc_infra" {
   source = "./modules/vm"
   cloudflare_zone_id = var.cloudflare_zone_id
@@ -50,20 +61,8 @@ module "operational_github_runner_itsvc_infra" {
     ${var.ssh_key_public_mgmt}
     ${var.ssh_key_public_admin}
   EOT
-
-  provisioner "remote-exec" {
-    inline = ["sudo apt update", "sudo apt install python3 -y"]
-
-    connection {
-      host        = "10.0.10.110"
-      type        = "ssh"
-      user        = "root"
-      private_key = var.ssh_key_private_mgmt
-    } 
-  }
-
-  provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '10.0.10.110,' --private-key /id_rsa -e 'pub_key=${var.ssh_key_public_mgmt}' ./ansible/docker.yml"
-  }  
+  ssh_key_public_mgmt = var.ssh_key_public_mgmt
+  ssh_key_private_mgmt = var.ssh_key_private_mgmt
+  ansible_file = "./ansible/docker.yml"
 }
 

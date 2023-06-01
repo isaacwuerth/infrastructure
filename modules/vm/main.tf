@@ -64,6 +64,21 @@ resource "proxmox_vm_qemu" "itsvc_default" {
   cipassword = "${var.password == "" ? random_password.password.result : var.password}"
   sshkeys = "${var.sshkeys}"
   cicustom = "vendor=pool01:snippets/vendor-ci.yml"
+
+  provisioner "remote-exec" {
+    inline = ["sudo apt update", "sudo apt install python3 -y"]
+
+    connection {
+      host        = var.ipv4addr
+      type        = "ssh"
+      user        = var.username
+      private_key = var.ssh_key_private_mgmt
+    } 
+  }
+
+  provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ${var.username} -i '${var.ipv4addr},' --private-key /id_rsa -e 'pub_key=${var.ssh_key_public_mgmt}' ${var.ansible_file}"
+  }  
 }
 
 resource "cloudflare_record" "server_record" {
