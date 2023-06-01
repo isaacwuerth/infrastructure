@@ -4,6 +4,12 @@
   remote_user: root
 
   tasks:
+    - local_action: command ssh root@{{ ansible_inventory_hostname }} exit
+      register: log_output
+      until: log_output.stdout.find("Last login") > -1
+      retries: 10
+      delay: 30
+
     - name: Install aptitude
       apt:
         name: aptitude
