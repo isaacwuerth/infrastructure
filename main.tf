@@ -13,12 +13,6 @@ terraform {
   }
 }
 
-provider "terraform_data" {
-  provider "local-exec" {
-    command = "ansible-playbook --connection=local 127.0.0.1 ./ansible/terraform-agent.yml"
-  }
-}
-
 provider "proxmox" {
   pm_api_url = "https://${var.proxmox_server}:8006/api2/json"
   pm_api_token_id = var.proxmox_token_id
@@ -83,7 +77,7 @@ resource "proxmox_lxc" "siem_docker_host" {
   }
 
   provisioner "local-exec" {
-    command = "rm /home/tfc-agent/.ssh/known_hosts && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '10.0.10.110,' --private-key /id_rsa -e 'pub_key=${var.ssh_key_public_mgmt}' ./ansible/docker.yml"
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '10.0.10.110,' --private-key /id_rsa -e 'pub_key=${var.ssh_key_public_mgmt}' ./ansible/docker.yml"
   }  
 }
 
