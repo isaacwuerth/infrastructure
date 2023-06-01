@@ -4,7 +4,7 @@
   remote_user: root
 
   tasks:
-    - local_action: command ssh root@{{ ansible_inventory_hostname }} exit
+    - local_action: command ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" root@{{ ansible_inventory_hostname }} exit
       register: log_output
       until: log_output.stdout.find("Last login") > -1
       retries: 10
