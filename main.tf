@@ -76,6 +76,6 @@ resource "proxmox_lxc" "siem_docker_host" {
     } 
   }
   provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '10.0.10.110,' --private-key /id_rsa -e 'pub_key=${var.ssh_key_public_mgmt}' ./ansible/docker.yml"
+    command = "ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '10.0.10.110,' --private-key /id_rsa -e 'pub_key=${var.ssh_key_public_mgmt}' ./ansible/docker.yml"
   }  
 }
