@@ -66,7 +66,7 @@ resource "proxmox_lxc" "siem_docker_host" {
   }
 
   provisioner "remote-exec" {
-    inline = ["sudo apt update", "sudo apt install python3 -y", "echo Done!"]
+    inline = ["sudo apt update", "sudo apt install python3 -y"]
 
     connection {
       host        = "10.0.10.110"
@@ -75,7 +75,8 @@ resource "proxmox_lxc" "siem_docker_host" {
       private_key = var.ssh_key_private_mgmt
     } 
   }
+  
   provisioner "local-exec" {
-    command = "rm ~/.ssh/known_hosts && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '10.0.10.110,' --private-key /id_rsa -e 'pub_key=${var.ssh_key_public_mgmt}' ./ansible/docker.yml"
+    command = "rm /home/tfc-agent/.ssh/known_hosts && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '10.0.10.110,' --private-key /id_rsa -e 'pub_key=${var.ssh_key_public_mgmt}' ./ansible/docker.yml"
   }  
 }
