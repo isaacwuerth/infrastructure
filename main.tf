@@ -44,14 +44,14 @@ resource "ssh_resource" "cloud_init_vendor" {
   }
 }
 
-module "siem" {
+module "expense-tracker" {
   source = "./modules/vm"
   cloudflare_zone_id = var.cloudflare_zone_id
-  name = "siem.itsvc.ch"
-  cores = 4
+  name = "expenses.itsvc.ch"
+  cores = 2
   sockets = 1
-  memory = 8192
-  disk_size = "128G"
+  memory = 4096
+  disk_size = "32G"
   ipv4addr = "10.0.10.110"
   ipv4gw = "10.0.10.1"
   ipv4mask = "24"
