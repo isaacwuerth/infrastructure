@@ -32,18 +32,6 @@ provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
 
-
-resource "ssh_resource" "cloud_init_vendor" {
-  host = "10.0.10.10"
-  user = "root"
-  private_key = "${var.ssh_key_private_mgmt}"
-  file {
-    content     = file("cloudinit/cloudinit-vendor-ubuntu.yml")
-    destination = "/mnt/pve/pool01/snippets/vendor-ci.yml"
-    permissions = "0644"
-  }
-}
-
 module "expense-tracker" {
   source = "./modules/vm"
   cloudflare_zone_id = var.cloudflare_zone_id
