@@ -32,10 +32,10 @@ provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
 
-module "expense-tracker" {
+module "tactical-rmm" {
   source = "./modules/vm"
   cloudflare_zone_id = var.cloudflare_zone_id
-  name = "expenses.itsvc.ch"
+  name = "rmm.itsvc.ch"
   cores = 2
   sockets = 1
   memory = 4096
