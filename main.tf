@@ -32,10 +32,10 @@ provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
 
-module "mini-services-itsvc-ch" {
+module "webtools-itsvc-ch" {
   source = "./modules/vm"
   cloudflare_zone_id = var.cloudflare_zone_id
-  name = "mini-services.itsvc.ch"
+  name = "webtools.itsvc.ch"
   cores = 2
   sockets = 1
   memory = 4096
