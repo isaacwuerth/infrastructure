@@ -32,10 +32,10 @@ provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
 
-module "tactical-rmm" {
+module "mini-services-itsvc-ch" {
   source = "./modules/vm"
   cloudflare_zone_id = var.cloudflare_zone_id
-  name = "rmm.itsvc.ch"
+  name = "mini-services.itsvc.ch"
   cores = 2
   sockets = 1
   memory = 4096
@@ -51,6 +51,6 @@ module "tactical-rmm" {
   EOT
   ssh_key_public_mgmt = var.ssh_key_public_mgmt
   ssh_key_private_mgmt = var.ssh_key_private_mgmt
-  ansible_file = "./ansible/docker.yml"
+  ansible_file = "./ansible/webtools.yml"
 }
 
