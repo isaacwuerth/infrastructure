@@ -1,3 +1,5 @@
-- src: community.general
-- src: ansible.posix
-- src: community.docker
+
+collections:
+  - name: community.general
+  - name: ansible.posix
+  - name: community.docker
