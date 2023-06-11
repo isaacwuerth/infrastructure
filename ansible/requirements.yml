@@ -1,0 +1,3 @@
+- src: community.general
+- src: ansible.posix
+- src: community.docker

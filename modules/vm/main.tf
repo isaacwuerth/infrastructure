@@ -78,7 +78,7 @@ resource "proxmox_vm_qemu" "vm" {
   }
 
   provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ${var.username} -i '${var.ipv4addr},' --private-key /id_rsa -e 'pub_key=${var.ssh_key_public_mgmt}' ${var.ansible_file}"
+    command = "ansible-galaxy install -r ansible/requirements.yml && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ${var.username} -i '${var.ipv4addr},' --private-key /id_rsa -e 'pub_key=${var.ssh_key_public_mgmt}' ${var.ansible_file}"
   }  
 }
 
