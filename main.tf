@@ -47,7 +47,7 @@ module "webtools-itsvc-ch" {
   ipv4addr = "10.0.10.110"
   ipv4gw = "10.0.10.1"
   ipv4mask = "24"
-  network_bridge = "vmbr1"
+  network_bridge = "vmbr0"
   username = "itsvcadmin"
   sshkeys = <<-EOT
     ${var.ssh_key_public_mgmt}
