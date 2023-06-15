@@ -1,5 +1,4 @@
 ---
-
 - name: Create and start services
   community.docker.docker_compose:
     project_name: sdx
@@ -7,22 +6,20 @@
       version: "3"
       services:
         proxy: 
-          image: isaacwuerth/sdx-proxy
+          image: isaacwuerth/sdx-proxy:main
           ports:
             - 80:80
-          volumes:
-            - {{ playbook_dir }}/nginx.conf:/etc/nginx/nginx.conf
           depends_on:
             - web
             - api
 
         web:
-          image: isaacwuerth/sdx-web
+          image: isaacwuerth/sdx-web:main
           environment:
             - API_URL=https://sdx.itsvc.ch
         
         api:
-          image: isaacwuerth/sdx-api
+          image: isaacwuerth/sdx-api:main
           environment:
             - ASPNETCORE_ENVIRONMENT=Production
   register: output

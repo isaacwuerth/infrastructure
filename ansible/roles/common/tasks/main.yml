@@ -1,6 +1,11 @@
 ---
+- name: Ensure a locale exists
+  locale_gen:
+    name: de_CH.UTF-8
+    state: present
+
 - name: Set timezone to Europe/Zurich
-  community.general.timezone:
+  timezone:
     name: Europe/Zurich
 
 - name: Update Package Cache (apt/Ubuntu)
@@ -65,11 +70,13 @@
     remote_src: True 
     src: /etc/legal
     dest: /etc/legal.bak 
-
+  ignore_errors: true
+  
 - name: Remove legal
   file: 
     path: /etc/legal
-    state: absent  
+    state: absent
+  ignore_errors: true
 
 - name: Enable IPv4 Forwarding
   ansible.posix.sysctl:

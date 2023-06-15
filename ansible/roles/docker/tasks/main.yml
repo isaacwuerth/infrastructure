@@ -1,12 +1,4 @@
 ---
-- name: Wait 300 seconds for port 22 to become open and contain "Last Login"
-  wait_for:
-    port: 22
-    host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
-    search_regex: Last Login
-    delay: 10
-  vars:
-    ansible_connection: local
 
 - name: Install aptitude
   apt:
@@ -45,5 +37,14 @@
       - containerd.io 
       - docker-buildx-plugin 
       - docker-compose-plugin
+      - docker-compose
     state: latest
     update_cache: true
+
+- name: Install docker python package
+  ansible.builtin.pip:
+    name: docker
+
+- name: Install docker-compose python package
+  ansible.builtin.pip:
+    name: docker-compose

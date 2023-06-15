@@ -1,7 +1,6 @@
 ---
 - name: Configure Terraform Agent
   hosts: all
-  remote_user: root
 
   tasks:
     - name: Disable Host Key Checking 

@@ -10,6 +10,10 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "~> 3.0"
     }
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "3.0.2"
+    }
   }
 }
 
@@ -51,6 +55,6 @@ module "webtools-itsvc-ch" {
   EOT
   ssh_key_public_mgmt = var.ssh_key_public_mgmt
   ssh_key_private_mgmt = var.ssh_key_private_mgmt
-  ansible_file = "./ansible/webtools.yml"
+  ansible_file = "./ansible/docker.yml"
 }
 
