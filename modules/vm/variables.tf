@@ -2,7 +2,7 @@ variable "name" {
   type        = string
   description = "The name of the VM"
   validation {
-    condition     = can(regex("^[a-zA-Z0-9/.]+.itsvc.ch$", var.name))
+    condition     = can(regex("^[a-zA-Z0-9/.-]+.itsvc.ch$", var.name))
     error_message = "The name of the VM can only contain alphanumeric characters and dashes."
   }
 }
