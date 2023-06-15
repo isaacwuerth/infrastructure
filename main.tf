@@ -37,14 +37,15 @@ provider "cloudflare" {
 }
 
 module "webtools-itsvc-ch" {
+  count = 4
   source = "./modules/vm"
   cloudflare_zone_id = var.cloudflare_zone_id
-  name = "webtools.itsvc.ch"
-  cores = 2
+  name = "k8s-host-${count.index}.itsvc.ch"
+  cores = 4
   sockets = 1
   memory = 4096
-  disk_size = "50G"
-  ipv4addr = "10.0.10.110"
+  disk_size = "100G"
+  ipv4addr = "10.0.10.11${count.index}"
   ipv4gw = "10.0.10.1"
   ipv4mask = "24"
   network_bridge = "vmbr0"
@@ -57,4 +58,3 @@ module "webtools-itsvc-ch" {
   ssh_key_private_mgmt = var.ssh_key_private_mgmt
   ansible_file = "./ansible/docker.yml"
 }
-
