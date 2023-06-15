@@ -10,10 +10,6 @@ terraform {
     random = {
       source = "hashicorp/random"
     }
-    cloudflare = {
-      source  = "cloudflare/cloudflare"
-      version = "~> 3.0"
-    }
   }
 }
 
@@ -80,16 +76,4 @@ resource "proxmox_vm_qemu" "vm" {
   # provisioner "local-exec" {
   #  command = "ansible-galaxy install -r ansible/requirements.yml && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ${var.username} -i '${var.ipv4addr},' --private-key /id_rsa -e 'pub_key=${var.ssh_key_public_mgmt}' ${var.ansible_file}"
   #}  
-}
-
-resource "cloudflare_record" "server_record" {
-  zone_id = var.cloudflare_zone_id
-  name    = var.name
-  value   = var.ipv4addr
-  type    = "A"
-  ttl     = 3600
-  proxied = false
-  depends_on = [
-    proxmox_vm_qemu.vm
-  ]
 }
