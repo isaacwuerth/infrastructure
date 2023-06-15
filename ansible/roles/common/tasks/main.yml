@@ -17,7 +17,7 @@
   when: ansible_distribution == "Ubuntu"
 
 - name: Install qemu-guest-agent, ntp
-  ansible.builtin.package:
+  package:
     name:
       - qemu-guest-agent
       - ntp
@@ -29,44 +29,44 @@
     state: latest
 
 - name: Recursively change ownership of a directory
-  ansible.builtin.file:
+  file:
     path: /etc/update-motd.d/
     state: directory
     recurse: yes
     mode: -x
 
 - name: Copy motd to remote
-  ansible.builtin.copy:
+  copy:
     src: motd
     dest: /etc/motd
     mode: '0644'
 
 - name: Copy SSH config to remote
-  ansible.builtin.copy:
+  copy:
     src: sshd_config
     dest: /etc/ssh/sshd_config
     mode: '0644'
 
 - name: Copy pam config to remote
-  ansible.builtin.copy:
+  copy:
     src: common-password
     dest: /etc/pam.d/common-password
     mode: '0644'
 
 - name: Copy jail2ban config to remote
-  ansible.builtin.copy:
+  copy:
     src: jail.local
     dest: /etc/fail2ban/jail.local
     mode: '0644'
 
 - name: Copy pwquality config to remote
-  ansible.builtin.copy:
+  copy:
     src: pwquality.conf 
     dest: /etc/security/pwquality.conf 
     mode: '0644'
 
 - name: Copy legal to legal.bak
-  ansible.builtin.copy: 
+  copy: 
     remote_src: True 
     src: /etc/legal
     dest: /etc/legal.bak 
@@ -79,7 +79,7 @@
   ignore_errors: true
 
 - name: Enable IPv4 Forwarding
-  ansible.posix.sysctl:
+  sysctl:
     name: net.ipv4.ip_forward
     value: '1'
     sysctl_set: true
@@ -87,18 +87,18 @@
     reload: true
 
 - name: Ensure keyboard layout to be de-CH
-  ansible.builtin.lineinfile:
+  lineinfile:
     path: /etc/default/keyboard
     regexp: '^XKBLAYOUT='
     line: XKBLAYOUT="de-CH"
 
 - name: Ensure keyboard variant tobe nodeadkeys
-  ansible.builtin.lineinfile:
+  lineinfile:
     path: /etc/default/keyboard
     regexp: '^XKBVARIANT='
     line: XKBVARIANT="nodeadkeys"
 
 - name: Start service qemu-guest-agent, if not started
-  ansible.builtin.service:
+  service:
     name: qemu-guest-agent
     state: started
