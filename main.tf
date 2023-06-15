@@ -36,6 +36,11 @@ provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
 
+provider "docker" {
+  host     = "ssh://itsvcadmin@10.0.10.100:22"
+  ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null"]
+}
+
 module "webtools-itsvc-ch" {
   count = 4
   source = "./modules/vm"
@@ -56,5 +61,5 @@ module "webtools-itsvc-ch" {
   EOT
   ssh_key_public_mgmt = var.ssh_key_public_mgmt
   ssh_key_private_mgmt = var.ssh_key_private_mgmt
-  ansible_file = "./ansible/docker.yml"
+  ansible_file = "./ansible/prov.yml"
 }

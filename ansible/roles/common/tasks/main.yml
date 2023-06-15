@@ -102,3 +102,4 @@
   service:
     name: qemu-guest-agent
     state: started
+    enabled: true
