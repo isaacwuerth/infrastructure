@@ -68,7 +68,7 @@ resource "proxmox_vm_qemu" "vm" {
   ciuser= "${var.username}"
   cipassword = "${var.password == "" ? random_password.password.result : var.password}"
   sshkeys = "${var.sshkeys}"
-  cicustom = ""
+  cicustom = "vendor=pool01:snippets/cloudinit.yml"
 
   provisioner "remote-exec" {
     inline = ["sudo apt update", "sudo apt install python3 -y"]

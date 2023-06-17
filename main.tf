@@ -41,6 +41,17 @@ provider "docker" {
   ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null"]
 }
 
+resource "ssh_resource" "cloud_init_vendor" {
+  host = var.proxmox_server
+  user = "root"
+  private_key = "${var.sshkey_private}"
+  file {
+    content     = file("cloudinit.yml")
+    destination = "/mnt/pve/pool01/snippets/cloudinit.yml"
+    permissions = "0644"
+  }
+}
+
 module "webtools-itsvc-ch" {
   count = 4
   source = "./modules/vm"
