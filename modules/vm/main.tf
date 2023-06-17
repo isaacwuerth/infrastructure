@@ -22,7 +22,15 @@ resource "random_password" "password" {
   min_special = 8
 }
 
+resource "local_sensitive_file" "id_rsa" {
+  content = var.ssh_key_private_mgmt
+  file_permission = "0600"
+  filename = "${path.module}/id_rsa"
+}
+
 resource "proxmox_vm_qemu" "vm" {
+  depends_on = [ local_sensitive_file.id_rsa ]
+  
   name = var.name
   target_node = var.target_node
   clone = var.template
@@ -74,6 +82,6 @@ resource "proxmox_vm_qemu" "vm" {
   }
 
   provisioner "local-exec" {
-   command = "ansible-galaxy install -r ansible/requirements.yml && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ${var.username} -i '${var.ipv4addr},' --private-key /id_rsa -e 'pub_key=${var.ssh_key_public_mgmt}' ${var.ansible_file}"
+   command = "ansible-galaxy install -r ansible/requirements.yml && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ${var.username} -i '${var.ipv4addr},' --private-key ${path.module}/id_rsa -e 'pub_key=${var.ssh_key_public_mgmt}' ${var.ansible_file}"
   }  
 }
