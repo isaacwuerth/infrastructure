@@ -51,7 +51,7 @@ resource "proxmox_vm_qemu" "vm" {
     size = var.disk_size
     type = "scsi"
     storage = "pool01"
-    iothread = 1
+    iothread = 0
   }
   
   network {
