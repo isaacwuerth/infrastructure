@@ -8,9 +8,6 @@
   timezone:
     name: Europe/Zurich
 
-- name: Wait for automatic system updates to complete
-  shell: while pgrep unattended; do sleep 10; done;
-
 - name: Update Package Cache (apt/Ubuntu)
   tags: always
   apt:
