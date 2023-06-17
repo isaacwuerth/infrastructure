@@ -28,6 +28,8 @@ resource "local_sensitive_file" "id_rsa" {
   filename = "${path.module}/id_rsa"
 }
 
+
+
 resource "proxmox_vm_qemu" "vm" {
   depends_on = [ local_sensitive_file.id_rsa ]
   
@@ -69,6 +71,7 @@ resource "proxmox_vm_qemu" "vm" {
   cipassword = "${var.password == "" ? random_password.password.result : var.password}"
   sshkeys = "${var.sshkeys}"
   cicustom = "vendor=pool01:snippets/cloudinit.yml"
+  cloudinit_cdrom_storage = "pool01"
 
   provisioner "remote-exec" {
     inline = ["sudo apt update", "sudo apt install python3 -y"]
