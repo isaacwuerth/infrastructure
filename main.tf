@@ -22,6 +22,7 @@ provider "proxmox" {
   pm_api_token_id = var.proxmox_token_id
   pm_api_token_secret = var.proxmox_token_secret
   pm_tls_insecure = true
+  pm_parallel = 2
 
   pm_log_enable = true
   pm_log_file   = "terraform-plugin-proxmox.log"
@@ -53,10 +54,9 @@ resource "ssh_resource" "cloud_init_vendor" {
 }
 
 module "webtools-itsvc-ch" {
-  count = 4
   source = "./modules/vm"
   cloudflare_zone_id = var.cloudflare_zone_id
-  name = "k8s-host-${count.index}.itsvc.ch"
+  name = "webtools.itsvc.ch"
   cores = 4
   sockets = 1
   memory = 4096
