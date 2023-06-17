@@ -16,7 +16,6 @@
       - python3-pip
       - virtualenv
       - python3-setuptools
-      - python3-full
     state: latest
     update_cache: true
 
@@ -39,7 +38,13 @@
       - docker-buildx-plugin 
       - docker-compose-plugin
       - docker-compose
-      - python-docker
-      - python-docker-compose
     state: latest
     update_cache: true
+
+- name: Install docker python package
+  pip:
+    name: docker
+
+- name: Install docker-compose python package
+  pip:
+    name: docker-compose
