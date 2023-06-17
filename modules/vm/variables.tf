@@ -98,7 +98,7 @@ variable "network_bridge" {
 variable "template" {
   type        = string
   description = "The name of the template to clone"
-  default = "itsvc-ubuntu-22.04"
+  default = "template-ubuntu-22.04"
 }
 
 variable "cloudflare_zone_id" {
