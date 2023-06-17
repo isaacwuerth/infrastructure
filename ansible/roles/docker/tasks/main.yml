@@ -39,6 +39,6 @@
       - docker-compose-plugin
       - docker-compose
       - python3-docker
-      - python3-dockr-
+      - python3-docker-compose
     state: latest
     update_cache: true
