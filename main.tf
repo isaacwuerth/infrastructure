@@ -44,7 +44,7 @@ provider "docker" {
 resource "ssh_resource" "cloud_init_vendor" {
   host = var.proxmox_server
   user = "root"
-  private_key = "${var.sshkey_private}"
+  private_key = "${var.ssh_key_private_mgmt}"
   file {
     content     = file("cloudinit.yml")
     destination = "/mnt/pve/pool01/snippets/cloudinit.yml"
