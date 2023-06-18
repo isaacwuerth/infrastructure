@@ -7,6 +7,7 @@
       services:
         proxy: 
           image: isaacwuerth/sdx-proxy:main
+          restart: always
           ports:
             - 80:80
           depends_on:
@@ -15,10 +16,12 @@
 
         web:
           image: isaacwuerth/sdx-web:main
+          restart: always
           environment:
             - API_URL=https://sdx.itsvc.ch
         
         api:
           image: isaacwuerth/sdx-api:main
+          restart: always
           environment:
             - ASPNETCORE_ENVIRONMENT=Production
