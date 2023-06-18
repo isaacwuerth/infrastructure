@@ -103,7 +103,7 @@ resource "random_id" "tunnel_secret" {
   byte_length = 35
 }
 
-resource "cloudflare_argo_tunnel" "tunnel" {
+resource "cloudflare_tunnel" "tunnel" {
   account_id = var.cloudflare_account_id
   name       = "zero_trust_ssh_http"
   secret     = random_id.argo_secret.b64_std
