@@ -38,7 +38,7 @@ provider "cloudflare" {
 }
 
 provider "docker" {
-  host     = "ssh://itsvcadmin@10.0.10.80:22"
+  host     = "ssh://root@10.0.10.80:22"
   ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null"]
 }
 
@@ -105,7 +105,7 @@ resource "random_id" "tunnel_secret" {
 
 resource "cloudflare_tunnel" "tunnel" {
   account_id = var.cloudflare_account_id
-  name       = "zero_trust_ssh_http"
+  name       = "itsvc-cloudflared-tunnel-01"
   secret     = random_id.tunnel_secret.b64_std
 }
 
