@@ -124,6 +124,13 @@ resource "cloudflare_tunnel_config" "sdx" {
       service  = "http://10.0.10.120"
       origin_request {
         no_tls_verify = true
+        connect_timeout          = "1m0s"
+        tls_timeout              = "1m0s"
+        tcp_keep_alive           = "1m0s"
+        keep_alive_connections   = 1024
+        keep_alive_timeout       = "1m0s"
+        no_happy_eyeballs        = false
+        disable_chunked_encoding = false
       }
     }
 
