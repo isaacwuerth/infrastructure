@@ -133,6 +133,13 @@ resource "cloudflare_tunnel_config" "sdx" {
   }
 }
 
+resource "cloudflare_record" "sdx" {
+  zone_id = var.cloudflare_zone_id
+  name    = "sdx"
+  value   = cloudflare_tunnel.tunnel.cname
+  type    = "CNAME"
+}
+
 resource "docker_image" "cloudflared" {
   name = "cloudflare/cloudflared:latest"
 }
