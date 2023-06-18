@@ -106,7 +106,7 @@ resource "random_id" "tunnel_secret" {
 resource "cloudflare_tunnel" "tunnel" {
   account_id = var.cloudflare_account_id
   name       = "zero_trust_ssh_http"
-  secret     = random_id.argo_secret.b64_std
+  secret     = random_id.tunnel_secret.b64_std
 }
 
 resource "cloudflare_tunnel_config" "sdx" {
@@ -128,13 +128,13 @@ resource "cloudflare_tunnel_config" "sdx" {
   }
 }
 
-resource "docker_image" "ubuntu" {
+resource "docker_image" "cloudflared" {
   name = "cloudflare/cloudflared:latest"
 }
 
 resource "docker_container" "ubuntu" {
   name  = "itsvc-cloudflared-tunnel-01"
-  image = docker_image.ubuntu.image_id
+  image = docker_image.cloudflared.image_id
   restart = "always"
   command = [
     "tunnel", "--no-autoupdate", "run", "--token", cloudflare_tunnel.tunnel.tunnel_token
