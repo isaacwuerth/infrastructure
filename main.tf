@@ -53,7 +53,7 @@ resource "ssh_resource" "cloud_init_vendor" {
   }
 }
 
-module "webtools-itsvc-ch" {
+module "k8s-itsvc-ch" {
   count = 4
   source = "./modules/vm"
   cloudflare_zone_id = var.cloudflare_zone_id
@@ -74,4 +74,45 @@ module "webtools-itsvc-ch" {
   ssh_key_public_mgmt = var.ssh_key_public_mgmt
   ssh_key_private_mgmt = var.ssh_key_private_mgmt
   ansible_file = "./ansible/prov.yml"
+}
+
+module "webtools-itsvc-ch" {
+  source = "./modules/vm"
+  cloudflare_zone_id = var.cloudflare_zone_id
+  name = "webtools.itsvc.ch"
+  cores = 4
+  sockets = 1
+  memory = 4096
+  disk_size = "100G"
+  ipv4addr = "10.0.10.120"
+  ipv4gw = "10.0.10.1"
+  ipv4mask = "24"
+  network_bridge = "vmbr0"
+  username = "itsvcadmin"
+  sshkeys = <<-EOT
+    ${var.ssh_key_public_mgmt}
+    ${var.ssh_key_public_admin}
+  EOT
+  ssh_key_public_mgmt = var.ssh_key_public_mgmt
+  ssh_key_private_mgmt = var.ssh_key_private_mgmt
+  ansible_file = "./ansible/webtools.yml"
+}
+
+resource "cloudflare_tunnel_config" "sdx" {
+  account_id = var.cloudflare_account_id
+  tunnel_id  = "342fb598-dc12-4f15-a9f4-569f68d2b471"
+
+  config {
+    warp_routing {
+      enabled = true
+    }
+    ingress_rule {
+      hostname = "sdx"
+      path     = "/"
+      service  = "http://10.0.10.120"
+      origin_request {
+        no_tls_verify = true
+      }
+    }
+  }
 }

@@ -30,6 +30,11 @@ variable "proxmox_token_secret" {
   sensitive = true
 }
 
+variable "cloudflare_account_id" {
+  type = string
+  description = "The ID of the Cloudflare account"
+}
+
 variable "cloudflare_api_token" {
   type        = string
   description = "The API token of the Cloudflare account"  
