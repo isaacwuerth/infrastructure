@@ -138,6 +138,7 @@ resource "cloudflare_record" "sdx" {
   name    = "sdx"
   value   = cloudflare_tunnel.tunnel.cname
   type    = "CNAME"
+  proxied = true
 }
 
 resource "docker_image" "cloudflared" {
