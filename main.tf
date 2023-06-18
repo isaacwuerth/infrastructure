@@ -38,7 +38,7 @@ provider "cloudflare" {
 }
 
 provider "docker" {
-  host     = "ssh://itsvcadmin@10.0.10.100:22"
+  host     = "ssh://itsvcadmin@10.0.10.80:22"
   ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null"]
 }
 
@@ -98,9 +98,20 @@ module "webtools-itsvc-ch" {
   ansible_file = "./ansible/webtools.yml"
 }
 
+
+resource "random_id" "tunnel_secret" {
+  byte_length = 35
+}
+
+resource "cloudflare_argo_tunnel" "tunnel" {
+  account_id = var.cloudflare_account_id
+  name       = "zero_trust_ssh_http"
+  secret     = random_id.argo_secret.b64_std
+}
+
 resource "cloudflare_tunnel_config" "sdx" {
   account_id = var.cloudflare_account_id
-  tunnel_id  = "342fb598-dc12-4f15-a9f4-569f68d2b471"
+  tunnel_id  = cloudflare_tunnel.tunnel.id
 
   config {
     warp_routing {
@@ -115,4 +126,17 @@ resource "cloudflare_tunnel_config" "sdx" {
       }
     }
   }
+}
+
+resource "docker_image" "ubuntu" {
+  name = "cloudflare/cloudflared:latest"
+}
+
+resource "docker_container" "ubuntu" {
+  name  = "itsvc-cloudflared-tunnel-01"
+  image = docker_image.ubuntu.image_id
+  restart = "always"
+  command = [
+    "tunnel", "--no-autoupdate", "run", "--token", cloudflare_tunnel.tunnel.tunnel_token
+  ]   
 }
