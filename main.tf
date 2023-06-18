@@ -127,6 +127,9 @@ resource "cloudflare_tunnel_config" "sdx" {
       }
     }
   }
+    ingress_rule {
+      service = "http://localhost"
+    }
 }
 
 resource "docker_image" "cloudflared" {
