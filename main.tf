@@ -107,6 +107,7 @@ resource "cloudflare_tunnel" "tunnel" {
   account_id = var.cloudflare_account_id
   name       = "itsvc-cloudflared-tunnel-01"
   secret     = "AQIDBAUGBwgBAgMEBQYHCAECAwQFBgcIAQIDBAUGBwg="
+  config_src = "cloudflare"
 }
 
 resource "cloudflare_tunnel_config" "sdx" {
