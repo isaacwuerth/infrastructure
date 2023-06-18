@@ -126,10 +126,11 @@ resource "cloudflare_tunnel_config" "sdx" {
         no_tls_verify = true
       }
     }
-  }
+
     ingress_rule {
       service = "http://localhost"
     }
+  }
 }
 
 resource "docker_image" "cloudflared" {
