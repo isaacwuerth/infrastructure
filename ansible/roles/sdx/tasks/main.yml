@@ -1,6 +1,6 @@
 ---
 - name: Create and start services
-  community.docker.docker_compose:
+  docker_compose:
     project_name: sdx
     definition:
       version: "3"
@@ -22,4 +22,3 @@
           image: isaacwuerth/sdx-api:main
           environment:
             - ASPNETCORE_ENVIRONMENT=Production
-  register: output
