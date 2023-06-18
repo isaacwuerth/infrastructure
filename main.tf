@@ -100,13 +100,13 @@ module "webtools-itsvc-ch" {
 
 
 resource "random_id" "tunnel_secret" {
-  byte_length = 32
+  byte_length = 35
 }
 
 resource "cloudflare_tunnel" "tunnel" {
   account_id = var.cloudflare_account_id
   name       = "itsvc-cloudflared-tunnel-01"
-  secret     = "AQIDBAUGBwgBAgMEBQYHCAECAwQFBgcIAQIDBAUGBwg="
+  secret     = random_id.tunnel_secret.b64_std
   config_src = "cloudflare"
 }
 
