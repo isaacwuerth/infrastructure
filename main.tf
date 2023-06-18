@@ -100,13 +100,13 @@ module "webtools-itsvc-ch" {
 
 
 resource "random_id" "tunnel_secret" {
-  byte_length = 35
+  byte_length = 32
 }
 
 resource "cloudflare_tunnel" "tunnel" {
   account_id = var.cloudflare_account_id
   name       = "itsvc-cloudflared-tunnel-01"
-  secret     = random_id.tunnel_secret.b64_std
+  secret     = "AQIDBAUGBwgBAgMEBQYHCAECAwQFBgcIAQIDBAUGBwg="
 }
 
 resource "cloudflare_tunnel_config" "sdx" {
@@ -118,7 +118,7 @@ resource "cloudflare_tunnel_config" "sdx" {
       enabled = true
     }
     ingress_rule {
-      hostname = "sdx"
+      hostname = "sdx.itsvc.ch"
       path     = "/"
       service  = "http://10.0.10.120"
       origin_request {
