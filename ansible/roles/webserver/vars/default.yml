@@ -1,0 +1,7 @@
+mysql_root_password: "MySQLRootTest"
+http_port: "80"
+http_doman: "miro.itsvc.ch"
+http_conf: "miro-itsvc-ch.conf"
+mysql_db_name: "wordpress"
+mysql_db_username: "wp_user"
+mysql_db_password: "wp_pw_safe_12"

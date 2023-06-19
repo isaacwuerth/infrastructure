@@ -98,6 +98,49 @@ module "webtools-itsvc-ch" {
   ansible_file = "./ansible/webtools.yml"
 }
 
+module "webtools-itsvc-ch" {
+  source = "./modules/vm"
+  cloudflare_zone_id = var.cloudflare_zone_id
+  name = "webtools.itsvc.ch"
+  cores = 4
+  sockets = 1
+  memory = 4096
+  disk_size = "100G"
+  ipv4addr = "10.0.10.120"
+  ipv4gw = "10.0.10.1"
+  ipv4mask = "24"
+  network_bridge = "vmbr0"
+  username = "itsvcadmin"
+  sshkeys = <<-EOT
+    ${var.ssh_key_public_mgmt}
+    ${var.ssh_key_public_admin}
+  EOT
+  ssh_key_public_mgmt = var.ssh_key_public_mgmt
+  ssh_key_private_mgmt = var.ssh_key_private_mgmt
+  ansible_file = "./ansible/webtools.yml"
+}
+
+module "miro" {
+  source = "./modules/vm"
+  cloudflare_zone_id = var.cloudflare_zone_id
+  name = "miro.itsvc.ch"
+  cores = 4
+  sockets = 1
+  memory = 4096
+  disk_size = "50GB"
+  ipv4addr = "10.0.10.120"
+  ipv4gw = "10.0.10.1"
+  ipv4mask = "24"
+  network_bridge = "vmbr0"
+  username = "miro"
+  sshkeys = <<-EOT
+    ${var.ssh_key_public_mgmt}
+    ${var.ssh_key_public_admin}
+  EOT
+  ssh_key_public_mgmt = var.ssh_key_public_mgmt
+  ssh_key_private_mgmt = var.ssh_key_private_mgmt
+  ansible_file = "./ansible/common.yml"
+}
 
 resource "random_id" "tunnel_secret" {
   byte_length = 35
@@ -135,17 +178,21 @@ resource "cloudflare_tunnel_config" "sdx" {
     }
 
     ingress_rule {
+      hostname = "miro.itsvc.ch"
+      path     = "/"
+      service  = "ssh://10.0.10.130"
+    }
+
+    ingress_rule {
+      hostname = "miro.itsvc.ch"
+      path     = "/"
+      service  = "http://10.0.10.130"
+    }
+
+    ingress_rule {
       service = "http://localhost"
     }
   }
-}
-
-resource "cloudflare_record" "sdx" {
-  zone_id = var.cloudflare_zone_id
-  name    = "sdx"
-  value   = cloudflare_tunnel.tunnel.cname
-  type    = "CNAME"
-  proxied = true
 }
 
 resource "docker_image" "cloudflared" {
@@ -159,4 +206,20 @@ resource "docker_container" "ubuntu" {
   command = [
     "tunnel", "--no-autoupdate", "run", "--token", cloudflare_tunnel.tunnel.tunnel_token
   ]   
+}
+
+resource "cloudflare_record" "sdx" {
+  zone_id = var.cloudflare_zone_id
+  name    = "sdx"
+  value   = cloudflare_tunnel.tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
+resource "cloudflare_record" "miro" {
+  zone_id = var.cloudflare_zone_id
+  name    = "miro"
+  value   = cloudflare_tunnel.tunnel.cname
+  type    = "CNAME"
+  proxied = true
 }
