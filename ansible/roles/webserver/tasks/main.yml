@@ -42,18 +42,18 @@
     login_user: root
     login_password: "{{ mysql_root_password }}"
 
-- name: Create a new database with name '{{mysql_db_name}}'
+- name: Create a new database with name "{{ mysql_db_name }}"
   community.general.mssql_db:
-    name: "{{mysql_db_name}}"
+    name: "{{ mysql_db_name }}"
     state: present
     login_user: root
     login_password: "{{ mysql_root_password }}"
 
-- name: Add mysql user with name '{{mysql_db_username}}'
+- name: Add mysql user with name "{{ mysql_db_username }}"
   mysql_user:
-    name: "{{mysql_db_username}}"
+    name: "{{ mysql_db_username }}"
     password: "{{ mysql_db_user_password }}"
-    priv: "{{mysql_db_name}}.*:ALL"
+    priv: "{{ mysql_db_name }}.*:ALL"
     host_all: yes
     state: present
     login_user: root
