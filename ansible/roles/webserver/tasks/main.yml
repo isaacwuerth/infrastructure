@@ -37,7 +37,7 @@
     login_password: "{{ mysql_root_password }}"
 
 - name: Create a new database
-  community.general.mssql_db:
+  mssql_db:
     name: "{{ mysql_db_name }}"
     state: present
     login_user: root
