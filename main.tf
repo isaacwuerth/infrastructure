@@ -139,7 +139,7 @@ module "miro" {
   EOT
   ssh_key_public_mgmt = var.ssh_key_public_mgmt
   ssh_key_private_mgmt = var.ssh_key_private_mgmt
-  ansible_file = "./ansible/common.yml"
+  ansible_file = "./ansible/webserver.yml"
 }
 
 resource "random_id" "tunnel_secret" {
