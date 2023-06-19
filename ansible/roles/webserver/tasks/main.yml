@@ -15,12 +15,6 @@
     state: latest
     update_cache: true
 
-- name: postgresql start and enable service
-  ansible.builtin.service:
-    name: postgresql
-    state: started
-    enabled: true
-
 - name: Sets the root password 
   mysql_user: 
     name: root 
