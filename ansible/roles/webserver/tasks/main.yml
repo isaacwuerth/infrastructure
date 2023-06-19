@@ -52,7 +52,7 @@
 - name: Add mysql user
   mysql_user:
     name: "{{ mysql_db_username }}"
-    password: "{{ mysql_db_user_password }}"
+    password: "{{ mysql_db_password }}"
     priv: "{{ mysql_db_name }}.*:ALL"
     host_all: yes
     state: present
