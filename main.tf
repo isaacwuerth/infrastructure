@@ -105,7 +105,7 @@ module "miro" {
   cores = 4
   sockets = 1
   memory = 4096
-  disk_size = "50GB"
+  disk_size = "50G"
   ipv4addr = "10.0.10.130"
   ipv4gw = "10.0.10.1"
   ipv4mask = "24"
