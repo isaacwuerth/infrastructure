@@ -53,7 +53,6 @@ resource "ssh_resource" "cloud_init_vendor" {
   }
 }
 
-
 module "webtools-itsvc-ch" {
   source = "./modules/vm"
   cloudflare_zone_id = var.cloudflare_zone_id
