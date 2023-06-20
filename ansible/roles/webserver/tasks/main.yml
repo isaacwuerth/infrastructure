@@ -9,7 +9,7 @@
       - python3-pymysql
       - php-fpm
       - php-mysql
-      - php-PHPMailer
+      - php-phpmailer
       - php-curl
       - php-common
     state: latest
