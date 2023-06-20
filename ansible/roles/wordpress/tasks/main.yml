@@ -1,0 +1,31 @@
+---
+- name: Create and start services
+  docker_compose:
+    project_name: wp_berymam
+    definition:
+      version: "3"
+      services:
+        db:
+          # We use a mariadb image which supports both amd64 & arm64 architecture
+          image: mariadb:latest
+          # If you really want to use MySQL, uncomment the following line
+          #image: mysql:8.0.27
+          command: '--default-authentication-plugin=mysql_native_password'
+          #volumes:
+          #  - db_data:/var/lib/mysql
+          restart: always
+          environment:
+            - MYSQL_ROOT_PASSWORD=Berymam_Root_PW-12
+            - MYSQL_DATABASE=wp_berymam
+            - MYSQL_USER=wp_berymam_usr
+            - MYSQL_PASSWORD=Berymam_DB_PW_12
+        wordpress:
+          image: wordpress:latest
+          ports:
+            - 80:80
+          restart: always
+          environment:
+            - WORDPRESS_DB_HOST=db
+            - WORDPRESS_DB_USER=wp_berymam
+            - WORDPRESS_DB_PASSWORD=wp_berymam_usr
+            - WORDPRESS_DB_NAME=Berymam_DB_PW_12
