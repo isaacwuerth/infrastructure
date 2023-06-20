@@ -26,6 +26,6 @@
           restart: always
           environment:
             - WORDPRESS_DB_HOST=db
-            - WORDPRESS_DB_USER=wp_berymam
-            - WORDPRESS_DB_PASSWORD=wp_berymam_usr
-            - WORDPRESS_DB_NAME=Berymam_DB_PW_12
+            - WORDPRESS_DB_USER=wp_berymam_usr
+            - WORDPRESS_DB_PASSWORD=Berymam_DB_PW_12
+            - WORDPRESS_DB_NAME=wp_berymam

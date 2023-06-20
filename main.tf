@@ -135,12 +135,6 @@ resource "cloudflare_tunnel_config" "sdx" {
     ingress_rule {
       hostname = "miro.itsvc.ch"
       path     = "/"
-      service  = "ssh://10.0.10.130"
-    }
-
-    ingress_rule {
-      hostname = "miro.itsvc.ch"
-      path     = "/"
       service  = "http://10.0.10.130"
     }
 
