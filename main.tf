@@ -97,15 +97,27 @@ module "miro" {
   ansible_file = "./ansible/wordpress.yml"
 }
 
-resource "random_id" "tunnel_secret" {
-  byte_length = 35
-}
 
-resource "cloudflare_tunnel" "tunnel" {
-  account_id = var.cloudflare_account_id
-  name       = "itsvc-cloudflared-tunnel-01"
-  secret     = random_id.tunnel_secret.b64_std
-  config_src = "cloudflare"
+module "miro" {
+  source = "./modules/vm"
+  cloudflare_zone_id = var.cloudflare_zone_id
+  name = "miro.itsvc.ch"
+  cores = 4
+  sockets = 1
+  memory = 4096
+  disk_size = "50G"
+  ipv4addr = "10.0.10.130"
+  ipv4gw = "10.0.10.1"
+  ipv4mask = "24"
+  network_bridge = "vmbr0"
+  username = "miro"
+  sshkeys = <<-EOT
+    ${var.ssh_key_public_mgmt}
+    ${var.ssh_key_public_admin}
+  EOT
+  ssh_key_public_mgmt = var.ssh_key_public_mgmt
+  ssh_key_private_mgmt = var.ssh_key_private_mgmt
+  ansible_file = "./ansible/wordpress.yml"
 }
 
 resource "cloudflare_tunnel_config" "sdx" {
@@ -133,6 +145,22 @@ resource "cloudflare_tunnel_config" "sdx" {
     }
 
     ingress_rule {
+      hostname = "finance.itsvc.ch"
+      path     = "/"
+      service  = "http://10.0.10.120:8081"
+      origin_request {
+        no_tls_verify = true
+        connect_timeout          = "1m0s"
+        tls_timeout              = "1m0s"
+        tcp_keep_alive           = "1m0s"
+        keep_alive_connections   = 1024
+        keep_alive_timeout       = "1m0s"
+        no_happy_eyeballs        = false
+        disable_chunked_encoding = false
+      }
+    }
+
+    ingress_rule {
       hostname = "miro.itsvc.ch"
       path     = "/"
       service  = "http://10.0.10.130"
@@ -144,18 +172,6 @@ resource "cloudflare_tunnel_config" "sdx" {
   }
 }
 
-resource "docker_image" "cloudflared" {
-  name = "cloudflare/cloudflared:latest"
-}
-
-resource "docker_container" "ubuntu" {
-  name  = "itsvc-cloudflared-tunnel-01"
-  image = docker_image.cloudflared.image_id
-  restart = "always"
-  command = [
-    "tunnel", "--no-autoupdate", "run", "--token", cloudflare_tunnel.tunnel.tunnel_token
-  ]   
-}
 
 resource "cloudflare_record" "sdx" {
   zone_id = var.cloudflare_zone_id
@@ -164,6 +180,15 @@ resource "cloudflare_record" "sdx" {
   type    = "CNAME"
   proxied = true
 }
+
+resource "cloudflare_record" "sdx" {
+  zone_id = var.cloudflare_zone_id
+  name    = "finance"
+  value   = cloudflare_tunnel.tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
 
 resource "cloudflare_record" "miro" {
   zone_id = var.cloudflare_zone_id
