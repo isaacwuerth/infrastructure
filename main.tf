@@ -82,7 +82,7 @@ module "finance-itsvc-ch" {
   cores = 2
   sockets = 1
   memory = 1024
-  disk_size = "20"
+  disk_size = "20G"
   ipv4addr = "10.0.10.121"
   ipv4gw = "10.0.10.1"
   ipv4mask = "24"
