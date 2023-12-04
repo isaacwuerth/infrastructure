@@ -1,0 +1,8 @@
+---
+- name: Mini Services
+  hosts: all
+  become: yes
+  roles:
+    - common
+    - docker
+    - firefly

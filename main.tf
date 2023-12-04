@@ -75,6 +75,28 @@ module "webtools-itsvc-ch" {
   ansible_file = "./ansible/webtools.yml"
 }
 
+module "finance-itsvc-ch" {
+  source = "./modules/vm"
+  cloudflare_zone_id = var.cloudflare_zone_id
+  name = "finance.itsvc.ch"
+  cores = 2
+  sockets = 1
+  memory = 1024
+  disk_size = "20"
+  ipv4addr = "10.0.10.121"
+  ipv4gw = "10.0.10.1"
+  ipv4mask = "24"
+  network_bridge = "vmbr0"
+  username = "itsvcadmin"
+  sshkeys = <<-EOT
+    ${var.ssh_key_public_mgmt}
+    ${var.ssh_key_public_admin}
+  EOT
+  ssh_key_public_mgmt = var.ssh_key_public_mgmt
+  ssh_key_private_mgmt = var.ssh_key_private_mgmt
+  ansible_file = "./ansible/finance.yml"
+}
+
 resource "cloudflare_tunnel_config" "sdx" {
   account_id = var.cloudflare_account_id
   tunnel_id  = cloudflare_tunnel.tunnel.id
@@ -102,7 +124,7 @@ resource "cloudflare_tunnel_config" "sdx" {
     ingress_rule {
       hostname = "finance.itsvc.ch"
       path     = "/"
-      service  = "http://10.0.10.120:8081"
+      service  = "http://10.0.10.121"
       origin_request {
         no_tls_verify = true
         connect_timeout          = "1m0s"
