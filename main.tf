@@ -181,7 +181,7 @@ resource "cloudflare_record" "sdx" {
   proxied = true
 }
 
-resource "cloudflare_record" "sdx" {
+resource "cloudflare_record" "finance" {
   zone_id = var.cloudflare_zone_id
   name    = "finance"
   value   = cloudflare_tunnel.tunnel.cname
