@@ -57,10 +57,10 @@ module "webtools-itsvc-ch" {
   source = "./modules/vm"
   cloudflare_zone_id = var.cloudflare_zone_id
   name = "webtools.itsvc.ch"
-  cores = 4
+  cores = 2
   sockets = 1
   memory = 4096
-  disk_size = "100G"
+  disk_size = "50G"
   ipv4addr = "10.0.10.120"
   ipv4gw = "10.0.10.1"
   ipv4mask = "24"
