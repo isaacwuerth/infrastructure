@@ -53,6 +53,28 @@ resource "ssh_resource" "cloud_init_vendor" {
   }
 }
 
+module "webtools-itsvc-ch" {
+  source = "./modules/vm"
+  cloudflare_zone_id = var.cloudflare_zone_id
+  name = "webtools.itsvc.ch"
+  cores = 2
+  sockets = 1
+  memory = 4096
+  disk_size = "50G"
+  ipv4addr = "10.0.10.120"
+  ipv4gw = "10.0.10.1"
+  ipv4mask = "24"
+  network_bridge = "vmbr0"
+  username = "itsvcadmin"
+  sshkeys = <<-EOT
+    ${var.ssh_key_public_mgmt}
+    ${var.ssh_key_public_admin}
+  EOT
+  ssh_key_public_mgmt = var.ssh_key_public_mgmt
+  ssh_key_private_mgmt = var.ssh_key_private_mgmt
+  ansible_file = "./ansible/webtools.yml"
+}
+
 module "finance-itsvc-ch" {
   source = "./modules/vm"
   cloudflare_zone_id = var.cloudflare_zone_id
