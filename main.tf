@@ -138,6 +138,22 @@ resource "cloudflare_tunnel_config" "sdx" {
     }
 
     ingress_rule {
+      hostname = "proxmox.itsvc.ch"
+      path     = "/"
+      service  = "https://10.0.10.10:8006"
+      origin_request {
+        no_tls_verify = true
+        connect_timeout          = "1m0s"
+        tls_timeout              = "1m0s"
+        tcp_keep_alive           = "1m0s"
+        keep_alive_connections   = 1024
+        keep_alive_timeout       = "1m0s"
+        no_happy_eyeballs        = false
+        disable_chunked_encoding = false
+      }
+    }
+
+    ingress_rule {
       service = "http://localhost"
     }
   }
@@ -155,6 +171,14 @@ resource "cloudflare_record" "sdx" {
 resource "cloudflare_record" "finance" {
   zone_id = var.cloudflare_zone_id
   name    = "finance"
+  value   = cloudflare_tunnel.tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
+resource "cloudflare_record" "proxmox" {
+  zone_id = var.cloudflare_zone_id
+  name    = "proxmox"
   value   = cloudflare_tunnel.tunnel.cname
   type    = "CNAME"
   proxied = true
